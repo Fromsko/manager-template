@@ -1,47 +1,61 @@
 {
-    "name": "manager-template",
-    "version": "1.0.0",
-    "private": true,
-    "type": "module",
-    "author": "fromsko <github.com/fromsko>",
-    "homepage": "https://github.com/fromsko",
-    "repository": {
-        "type": "git",
-        "url": "https://github.com/fromsko/manager-template"
-    },
-    "keywords": [
-        "bun",
-        "rsbuild",
-        "react",
-        "antd",
-        "tailwindcss"
-    ],
-    "scripts": {
-        "build": "rsbuild build",
-        "dev": "rsbuild dev --open",
-        "preview": "rsbuild preview",
-        "test": "rstest",
-        "test:watch": "rstest -w"
-    },
-    "dependencies": {
-        "antd": "^6.3.6",
-        "react": "^19.2.3",
-        "react-dom": "^19.2.3"
-    },
-    "devDependencies": {
-        "@rsbuild/core": "^1.7.1",
-        "@rsbuild/plugin-react": "^1.4.2",
-        "@rstest/core": "^0.9.8",
-        "@tailwindcss/postcss": "^4.2.2",
-        "@testing-library/jest-dom": "^6.9.1",
-        "@testing-library/react": "^16.3.2",
-        "@types/react": "^19.2.7",
-        "@types/react-dom": "^19.2.3",
-        "@vitejs/plugin-react": "^6.0.1",
-        "happy-dom": "^20.9.0",
-        "jsdom": "^29.0.2",
-        "tailwindcss": "^4.2.2",
-        "typescript": "^5.9.3",
-        "vitest": "^4.1.4"
-    }
+  "name": "manager-template",
+  "version": "1.1.0",
+  "private": true,
+  "type": "module",
+  "author": "fromsko <github.com/fromsko>",
+  "homepage": "https://github.com/fromsko",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/fromsko/manager-template"
+  },
+  "keywords": [
+    "bun",
+    "rsbuild",
+    "react",
+    "antd",
+    "tailwindcss"
+  ],
+  "scripts": {
+    "dev": "rsbuild dev --open",
+    "build": "rsbuild build",
+    "build:go": "rsbuild build",
+    "preview": "rsbuild preview",
+    "test": "rstest",
+    "test:watch": "rstest -w"
+  },
+  "dependencies": {
+    "@tanstack/react-query": "^5.99.0",
+    "@tanstack/react-router": "^1.168.22",
+    "antd": "^6.3.6",
+    "lucide-react": "^1.8.0",
+    "motion": "^12.38.0",
+    "react": "^19.2.3",
+    "react-dom": "^19.2.3",
+    "zod": "^4.3.6",
+    "zustand": "^5.0.12"
+  },
+  "devDependencies": {
+    "@rsbuild/core": "^1.7.1",
+    "@rsbuild/plugin-react": "^1.4.2",
+    "@rstest/core": "^0.9.8",
+    "@tailwindcss/postcss": "^4.2.2",
+    "@tanstack/router-plugin": "^1.167.22",
+    "@testing-library/jest-dom": "^6.9.1",
+    "@testing-library/react": "^16.3.2",
+    "@types/react": "^19.2.7",
+    "@types/react-dom": "^19.2.3",
+    "@vitejs/plugin-react": "^6.0.1",
+    "happy-dom": "^20.9.0",
+    "jsdom": "^29.0.2",
+    "msw": "^2.13.4",
+    "tailwindcss": "^4.2.2",
+    "typescript": "^5.9.3",
+    "vitest": "^4.1.4"
+  },
+  "msw": {
+    "workerDirectory": [
+      "public"
+    ]
+  }
 }
