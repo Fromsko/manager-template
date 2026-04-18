@@ -19,5 +19,8 @@ dist/
 .andy-code/
 .crush
 
+# Generated
+.tanstack/
+
 # Lockfile
 package-lock.json
