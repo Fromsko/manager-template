@@ -15,6 +15,24 @@ export const APP_MENU_TREE: AppMenuItem[] = [
     path: '/dashboard',
   },
   {
+    key: 'gateways',
+    label: '网关实例',
+    icon: 'Server',
+    path: '/gateways',
+  },
+  {
+    key: 'routes',
+    label: '路由规则',
+    icon: 'GitBranch',
+    path: '/routes',
+  },
+  {
+    key: 'alerts',
+    label: '告警中心',
+    icon: 'TriangleAlert',
+    path: '/alerts',
+  },
+  {
     key: 'users',
     label: '用户管理',
     icon: 'Users',

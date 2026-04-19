@@ -15,7 +15,10 @@ import { Route as LoginIndexRouteImport } from './routes/login/index'
 import { Route as R404IndexRouteImport } from './routes/404/index'
 import { Route as AuthUsersIndexRouteImport } from './routes/_auth/users/index'
 import { Route as AuthSettingsIndexRouteImport } from './routes/_auth/settings/index'
+import { Route as AuthRoutesIndexRouteImport } from './routes/_auth/routes/index'
+import { Route as AuthGatewaysIndexRouteImport } from './routes/_auth/gateways/index'
 import { Route as AuthDashboardIndexRouteImport } from './routes/_auth/dashboard/index'
+import { Route as AuthAlertsIndexRouteImport } from './routes/_auth/alerts/index'
 import { Route as Auth403IndexRouteImport } from './routes/_auth/403/index'
 
 const AuthRouteRoute = AuthRouteRouteImport.update({
@@ -47,9 +50,24 @@ const AuthSettingsIndexRoute = AuthSettingsIndexRouteImport.update({
   path: '/settings/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
+const AuthRoutesIndexRoute = AuthRoutesIndexRouteImport.update({
+  id: '/routes/',
+  path: '/routes/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthGatewaysIndexRoute = AuthGatewaysIndexRouteImport.update({
+  id: '/gateways/',
+  path: '/gateways/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
 const AuthDashboardIndexRoute = AuthDashboardIndexRouteImport.update({
   id: '/dashboard/',
   path: '/dashboard/',
+  getParentRoute: () => AuthRouteRoute,
+} as any)
+const AuthAlertsIndexRoute = AuthAlertsIndexRouteImport.update({
+  id: '/alerts/',
+  path: '/alerts/',
   getParentRoute: () => AuthRouteRoute,
 } as any)
 const Auth403IndexRoute = Auth403IndexRouteImport.update({
@@ -63,7 +81,10 @@ export interface FileRoutesByFullPath {
   '/404/': typeof R404IndexRoute
   '/login/': typeof LoginIndexRoute
   '/403/': typeof Auth403IndexRoute
+  '/alerts/': typeof AuthAlertsIndexRoute
   '/dashboard/': typeof AuthDashboardIndexRoute
+  '/gateways/': typeof AuthGatewaysIndexRoute
+  '/routes/': typeof AuthRoutesIndexRoute
   '/settings/': typeof AuthSettingsIndexRoute
   '/users/': typeof AuthUsersIndexRoute
 }
@@ -72,7 +93,10 @@ export interface FileRoutesByTo {
   '/404': typeof R404IndexRoute
   '/login': typeof LoginIndexRoute
   '/403': typeof Auth403IndexRoute
+  '/alerts': typeof AuthAlertsIndexRoute
   '/dashboard': typeof AuthDashboardIndexRoute
+  '/gateways': typeof AuthGatewaysIndexRoute
+  '/routes': typeof AuthRoutesIndexRoute
   '/settings': typeof AuthSettingsIndexRoute
   '/users': typeof AuthUsersIndexRoute
 }
@@ -83,7 +107,10 @@ export interface FileRoutesById {
   '/404/': typeof R404IndexRoute
   '/login/': typeof LoginIndexRoute
   '/_auth/403/': typeof Auth403IndexRoute
+  '/_auth/alerts/': typeof AuthAlertsIndexRoute
   '/_auth/dashboard/': typeof AuthDashboardIndexRoute
+  '/_auth/gateways/': typeof AuthGatewaysIndexRoute
+  '/_auth/routes/': typeof AuthRoutesIndexRoute
   '/_auth/settings/': typeof AuthSettingsIndexRoute
   '/_auth/users/': typeof AuthUsersIndexRoute
 }
@@ -94,11 +121,24 @@ export interface FileRouteTypes {
     | '/404/'
     | '/login/'
     | '/403/'
+    | '/alerts/'
     | '/dashboard/'
+    | '/gateways/'
+    | '/routes/'
     | '/settings/'
     | '/users/'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/404' | '/login' | '/403' | '/dashboard' | '/settings' | '/users'
+  to:
+    | '/'
+    | '/404'
+    | '/login'
+    | '/403'
+    | '/alerts'
+    | '/dashboard'
+    | '/gateways'
+    | '/routes'
+    | '/settings'
+    | '/users'
   id:
     | '__root__'
     | '/'
@@ -106,7 +146,10 @@ export interface FileRouteTypes {
     | '/404/'
     | '/login/'
     | '/_auth/403/'
+    | '/_auth/alerts/'
     | '/_auth/dashboard/'
+    | '/_auth/gateways/'
+    | '/_auth/routes/'
     | '/_auth/settings/'
     | '/_auth/users/'
   fileRoutesById: FileRoutesById
@@ -162,11 +205,32 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthSettingsIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
+    '/_auth/routes/': {
+      id: '/_auth/routes/'
+      path: '/routes'
+      fullPath: '/routes/'
+      preLoaderRoute: typeof AuthRoutesIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/gateways/': {
+      id: '/_auth/gateways/'
+      path: '/gateways'
+      fullPath: '/gateways/'
+      preLoaderRoute: typeof AuthGatewaysIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
     '/_auth/dashboard/': {
       id: '/_auth/dashboard/'
       path: '/dashboard'
       fullPath: '/dashboard/'
       preLoaderRoute: typeof AuthDashboardIndexRouteImport
+      parentRoute: typeof AuthRouteRoute
+    }
+    '/_auth/alerts/': {
+      id: '/_auth/alerts/'
+      path: '/alerts'
+      fullPath: '/alerts/'
+      preLoaderRoute: typeof AuthAlertsIndexRouteImport
       parentRoute: typeof AuthRouteRoute
     }
     '/_auth/403/': {
@@ -181,14 +245,20 @@ declare module '@tanstack/react-router' {
 
 interface AuthRouteRouteChildren {
   Auth403IndexRoute: typeof Auth403IndexRoute
+  AuthAlertsIndexRoute: typeof AuthAlertsIndexRoute
   AuthDashboardIndexRoute: typeof AuthDashboardIndexRoute
+  AuthGatewaysIndexRoute: typeof AuthGatewaysIndexRoute
+  AuthRoutesIndexRoute: typeof AuthRoutesIndexRoute
   AuthSettingsIndexRoute: typeof AuthSettingsIndexRoute
   AuthUsersIndexRoute: typeof AuthUsersIndexRoute
 }
 
 const AuthRouteRouteChildren: AuthRouteRouteChildren = {
   Auth403IndexRoute: Auth403IndexRoute,
+  AuthAlertsIndexRoute: AuthAlertsIndexRoute,
   AuthDashboardIndexRoute: AuthDashboardIndexRoute,
+  AuthGatewaysIndexRoute: AuthGatewaysIndexRoute,
+  AuthRoutesIndexRoute: AuthRoutesIndexRoute,
   AuthSettingsIndexRoute: AuthSettingsIndexRoute,
   AuthUsersIndexRoute: AuthUsersIndexRoute,
 }

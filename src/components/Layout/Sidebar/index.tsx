@@ -1,4 +1,4 @@
-import { Button, Drawer, Flex, Layout, Menu, theme } from 'antd';
+import { Button, Drawer, Flex, Layout, Menu, Typography, theme } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useNavigate } from '@tanstack/react-router';
 import { motion } from 'motion/react';
@@ -81,8 +81,32 @@ export function Sidebar({ mobileDrawerOpen, onMobileDrawerOpenChange }: SidebarP
         {sidebarCollapsed && !isMobile ? (
           <AppIcon name="LayoutDashboard" size={28} color={token.colorTextLightSolid} />
         ) : (
-          <h1 style={{ color: token.colorTextLightSolid }}>Gateway Manager</h1>
+          <Flex vertical gap={4}>
+            <Typography.Text style={{ color: 'rgba(255,255,255,0.72)', fontSize: 12 }}>
+              Gateway Control Plane
+            </Typography.Text>
+            <h1 style={{ color: token.colorTextLightSolid, margin: 0 }}>Gateway Manager</h1>
+          </Flex>
         )}
+      </div>
+      <div style={{ padding: sidebarCollapsed && !isMobile ? '0 8px 8px' : '0 16px 12px' }}>
+        {!sidebarCollapsed || isMobile ? (
+          <div
+            style={{
+              borderRadius: 10,
+              padding: '10px 12px',
+              background: 'rgba(255,255,255,0.06)',
+              border: '1px solid rgba(255,255,255,0.08)',
+            }}
+          >
+            <Typography.Text style={{ color: 'rgba(255,255,255,0.68)', fontSize: 12 }}>
+              当前环境
+            </Typography.Text>
+            <Typography.Text style={{ display: 'block', color: token.colorTextLightSolid }}>
+              Production Workspace
+            </Typography.Text>
+          </div>
+        ) : null}
       </div>
       <div className="sidebar-menu-wrapper">
         <Menu
@@ -100,7 +124,7 @@ export function Sidebar({ mobileDrawerOpen, onMobileDrawerOpenChange }: SidebarP
         style={{
           borderTop: `1px solid ${token.colorSplit}`,
           padding: isMobile || !sidebarCollapsed ? '8px 12px' : '8px 4px',
-          background: 'rgba(0, 0, 0, 0.15)',
+          background: 'rgba(255, 255, 255, 0.04)',
         }}
       >
         <UserMenu collapsed={!isMobile && sidebarCollapsed} inverted />
@@ -113,7 +137,7 @@ export function Sidebar({ mobileDrawerOpen, onMobileDrawerOpenChange }: SidebarP
       initial={{ opacity: 0, x: -12 }}
       animate={{ opacity: 1, x: 0 }}
       transition={easeTransition}
-      style={{ height: '100%', position: 'relative', background: '#001529' }}
+      style={{ height: '100%', position: 'relative', background: '#020617' }}
     >
       <Button
         type="text"

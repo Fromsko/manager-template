@@ -13,6 +13,7 @@ export function DataTable<T extends object>({
   loading,
   skeletonRows = 5,
   maxHeight,
+  pagination,
   ...tableProps
 }: DataTableProps<T>) {
   const { token } = theme.useToken();
@@ -23,17 +24,32 @@ export function DataTable<T extends object>({
 
   return (
     <div
+      className="data-table-shell"
       style={{
         border: `1px solid ${token.colorBorderSecondary}`,
-        borderRadius: token.borderRadius,
+        borderRadius: token.borderRadiusLG,
         overflow: 'hidden',
         flex: 1,
+        background: token.colorBgContainer,
+        boxShadow: token.boxShadowTertiary,
       }}
     >
       <Table<T>
         size="middle"
+        sticky
         locale={{ emptyText: <DataTableEmpty /> }}
-        scroll={maxHeight ? { y: maxHeight } : undefined}
+        scroll={maxHeight ? { y: maxHeight, x: 'max-content' } : { x: 'max-content' }}
+        pagination={
+          pagination === false
+            ? false
+            : {
+                size: 'default',
+                showSizeChanger: true,
+                showLessItems: true,
+                ...pagination,
+              }
+        }
+        rowHoverable
         {...tableProps}
       />
     </div>

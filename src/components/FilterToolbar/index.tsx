@@ -1,6 +1,6 @@
 import { useRef, useState, useEffect } from 'react';
 import type { ReactNode, CSSProperties } from 'react';
-import { Flex, Button, Popover, Badge } from 'antd';
+import { Flex, Button, Popover, Badge, theme } from 'antd';
 import { Filter } from '@/core/icons';
 
 interface FilterItem {
@@ -18,6 +18,7 @@ interface FilterToolbarProps {
 export function FilterToolbar({ filters, actions, style }: FilterToolbarProps) {
   const containerRef = useRef<HTMLDivElement>(null);
   const [visibleCount, setVisibleCount] = useState(filters.length);
+  const { token } = theme.useToken();
 
   useEffect(() => {
     const el = containerRef.current;
@@ -54,7 +55,16 @@ export function FilterToolbar({ filters, actions, style }: FilterToolbarProps) {
   return (
     <div
       ref={containerRef}
-      style={{ display: 'flex', alignItems: 'center', gap: 12, ...style }}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: token.padding,
+        border: `1px solid ${token.colorBorderSecondary}`,
+        borderRadius: token.borderRadiusLG,
+        background: token.colorBgContainer,
+        ...style,
+      }}
     >
       <Flex gap={12} wrap="nowrap" style={{ flex: 1, minWidth: 0 }}>
         {visible.map((f) => (
@@ -67,7 +77,7 @@ export function FilterToolbar({ filters, actions, style }: FilterToolbarProps) {
             trigger="click"
             placement="bottomLeft"
             content={
-              <Flex vertical gap={12} style={{ minWidth: 200 }}>
+              <Flex vertical gap={12} style={{ minWidth: 220 }}>
                 {overflow.map((f) => (
                   <div key={f.key}>{f.element}</div>
                 ))}
