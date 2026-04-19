@@ -28,6 +28,28 @@ Preview the production build locally:
 bun run preview
 ```
 
+## Testing
+
+Run component and unit tests:
+
+```bash
+bun run test
+```
+
+Run Playwright end-to-end coverage for the full app:
+
+```bash
+bun run test:e2e
+```
+
+Open the Playwright UI runner:
+
+```bash
+bun run test:e2e:ui
+```
+
+The e2e suite covers login, dashboard access protection, user CRUD flows, filtering, settings persistence, and logout.
+
 ## Learn more
 
 To learn more about Rsbuild, check out the following resources:

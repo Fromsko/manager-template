@@ -16,10 +16,30 @@ const lightPreset: ThemePreset = {
   label: 'Light',
   algorithm: theme.defaultAlgorithm,
   token: {
-    colorPrimary: '#1677ff',
+    colorPrimary: '#2563eb',
+    colorInfo: '#2563eb',
+    colorSuccess: '#16a34a',
+    colorWarning: '#d97706',
+    colorError: '#dc2626',
     colorBgBase: '#ffffff',
-    colorBgLayout: '#f5f5f5',
+    colorBgLayout: '#f3f6fb',
     colorBgContainer: '#ffffff',
+    colorBorderSecondary: '#dbe3f0',
+    colorFillAlter: '#f8fafc',
+  },
+  components: {
+    Layout: {
+      headerBg: '#ffffff',
+      siderBg: '#0f172a',
+      triggerBg: '#111c34',
+    },
+    Menu: {
+      itemBg: 'transparent',
+      itemColor: 'rgba(255,255,255,0.72)',
+      itemHoverColor: '#ffffff',
+      itemSelectedBg: 'rgba(37,99,235,0.18)',
+      itemSelectedColor: '#ffffff',
+    },
   },
 };
 
@@ -28,10 +48,30 @@ const darkPreset: ThemePreset = {
   label: 'Dark',
   algorithm: theme.darkAlgorithm,
   token: {
-    colorPrimary: '#1677ff',
-    colorBgBase: '#141414',
-    colorBgLayout: '#000000',
-    colorBgContainer: '#141414',
+    colorPrimary: '#60a5fa',
+    colorInfo: '#60a5fa',
+    colorSuccess: '#22c55e',
+    colorWarning: '#f59e0b',
+    colorError: '#f87171',
+    colorBgBase: '#0b1120',
+    colorBgLayout: '#020617',
+    colorBgContainer: '#111827',
+    colorBorderSecondary: '#1f2937',
+    colorFillAlter: '#0f172a',
+  },
+  components: {
+    Layout: {
+      headerBg: '#111827',
+      siderBg: '#020617',
+      triggerBg: '#0f172a',
+    },
+    Menu: {
+      itemBg: 'transparent',
+      itemColor: 'rgba(255,255,255,0.68)',
+      itemHoverColor: '#ffffff',
+      itemSelectedBg: 'rgba(96,165,250,0.18)',
+      itemSelectedColor: '#ffffff',
+    },
   },
 };
 
