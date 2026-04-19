@@ -10,7 +10,7 @@ export default defineConfig({
                 TanStackRouterRspack({
                     routesDirectory: './src/routes',
                     generatedRouteTree: './src/routeTree.gen.ts',
-                    autoCodeSplitting: true,
+                    autoCodeSplitting: false,
                 }),
             ],
         },
@@ -24,39 +24,6 @@ export default defineConfig({
         assetPrefix: './',
         distPath: {
             root: 'dist',
-        },
-    },
-    performance: {
-        chunkSplit: {
-            strategy: 'custom',
-            splitChunks: {
-                cacheGroups: {
-                    'vendor-react': {
-                        test: /[\\/]node_modules[\\/](react|react-dom)[\\/]/,
-                        name: 'vendor-react',
-                        chunks: 'all',
-                        priority: 30,
-                    },
-                    'vendor-antd': {
-                        test: /[\\/]node_modules[\\/](antd|@ant-design|rc-.*)[\\/]/,
-                        name: 'vendor-antd',
-                        chunks: 'all',
-                        priority: 20,
-                    },
-                    'vendor-tanstack': {
-                        test: /[\\/]node_modules[\\/](@tanstack)[\\/]/,
-                        name: 'vendor-tanstack',
-                        chunks: 'all',
-                        priority: 15,
-                    },
-                    'vendor-motion': {
-                        test: /[\\/]node_modules[\\/](motion|framer-motion)[\\/]/,
-                        name: 'vendor-motion',
-                        chunks: 'all',
-                        priority: 10,
-                    },
-                },
-            },
         },
     },
     server: {

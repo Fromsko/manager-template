@@ -1,9 +1,11 @@
 import { createFileRoute, useNavigate } from '@tanstack/react-router';
 import { z } from 'zod';
-import { Button, Form, Input, Select, Space, Tag, message, Popconfirm } from 'antd';
+import { Button, Form, Input, Select, Space, Tag, message, Popconfirm, Typography, Flex } from 'antd';
 import { useMemo, useState } from 'react';
 import { PageContainer } from '@/components/PageContainer';
 import { DataTable } from '@/components/DataTable';
+import { DataTableFiltersState } from '@/components/DataTable/DataTableFiltersState';
+import { DataTableSummary } from '@/components/DataTable/DataTableSummary';
 import { FilterToolbar } from '@/components/FilterToolbar';
 import { FormModal } from '@/components/FormModal';
 import { Auth } from '@/components/Auth';
@@ -52,12 +54,16 @@ function UsersPage() {
     listParams: listParams as Record<string, unknown>,
   });
 
+  const activeFilterCount = Number(Boolean(search.keyword)) + Number(Boolean(search.role));
+  const totalUsers = listQuery.data?.total ?? 0;
+
   const columns: ColumnsType<User> = [
-    { title: '名称', dataIndex: 'name', sorter: true },
-    { title: '邮箱', dataIndex: 'email', sorter: true },
+    { title: '名称', dataIndex: 'name', sorter: true, width: 220 },
+    { title: '邮箱', dataIndex: 'email', sorter: true, width: 280 },
     {
       title: '角色',
       dataIndex: 'role',
+      width: 120,
       render: (role: string) => {
         const colorMap: Record<string, string> = { admin: 'red', editor: 'blue', viewer: 'green' };
         return <Tag color={colorMap[role] ?? 'default'}>{role}</Tag>;
@@ -66,9 +72,10 @@ function UsersPage() {
     {
       title: '操作',
       key: 'actions',
-      width: 160,
+      width: 180,
+      fixed: 'right',
       render: (_, record) => (
-        <Space>
+        <Space size={4}>
           <Auth permission="user:update">
             <Button
               type="link"
@@ -83,7 +90,7 @@ function UsersPage() {
             </Button>
           </Auth>
           <Auth permission="user:delete">
-            <Popconfirm title="确定删除？" onConfirm={() => void handleDelete(record.id)}>
+            <Popconfirm title="确定删除该用户吗？" onConfirm={() => void handleDelete(record.id)}>
               <Button type="link" size="small" danger icon={<Trash2 size={14} />}>
                 删除
               </Button>
@@ -96,7 +103,8 @@ function UsersPage() {
 
   const handleDelete = async (id: string) => {
     await deleteMutation.mutateAsync(id);
-    message.success('删除成功');
+    await listQuery.refetch();
+    message.success('用户已删除');
   };
 
   const handleSubmit = async (values: CreateUserRequest) => {
@@ -107,10 +115,12 @@ function UsersPage() {
         role: values.role,
       };
       await updateMutation.mutateAsync({ id: editingUser.id, data });
-      message.success('更新成功');
+      await listQuery.refetch();
+      message.success('用户信息已更新');
     } else {
       await createMutation.mutateAsync(values);
-      message.success('创建成功');
+      await listQuery.refetch();
+      message.success('用户已创建');
     }
     setModalOpen(false);
     setEditingUser(null);
@@ -118,6 +128,10 @@ function UsersPage() {
 
   const updateSearch = (updates: Partial<typeof search>) => {
     navigate({ search: (prev) => ({ ...prev, ...updates }) });
+  };
+
+  const clearFilters = () => {
+    updateSearch({ keyword: '', role: '', offset: 0 });
   };
 
   const modalInitial =
@@ -128,6 +142,7 @@ function UsersPage() {
   return (
     <PageContainer
       title="用户管理"
+      subtitle="集中维护用户信息、角色归属与筛选查询条件。"
       extra={
         <Auth permission="user:create">
           <Button
@@ -143,49 +158,92 @@ function UsersPage() {
         </Auth>
       }
     >
-      <FilterToolbar
-        filters={[
-          {
-            key: 'keyword',
-            element: (
-              <Input
-                placeholder="搜索用户名/邮箱"
-                prefix={<Search size={14} />}
-                value={search.keyword}
-                onChange={(e) => updateSearch({ keyword: e.target.value, offset: 0 })}
-                allowClear
-              />
-            ),
-          },
-          {
-            key: 'role',
-            element: (
-              <Select
-                placeholder="角色筛选"
-                value={search.role || undefined}
-                onChange={(val) => updateSearch({ role: val ?? '', offset: 0 })}
-                allowClear
-                style={{ width: '100%' }}
-                options={[
-                  { label: '管理员', value: 'admin' },
-                  { label: '编辑', value: 'editor' },
-                  { label: '观察者', value: 'viewer' },
-                ]}
-              />
-            ),
-          },
-        ]}
-      />
+      <Flex vertical gap={12}>
+        <FilterToolbar
+          filters={[
+            {
+              key: 'keyword',
+              element: (
+                <Input
+                  placeholder="搜索用户名/邮箱"
+                  prefix={<Search size={14} />}
+                  value={search.keyword}
+                  onChange={(e) => updateSearch({ keyword: e.target.value, offset: 0 })}
+                  allowClear
+                />
+              ),
+            },
+            {
+              key: 'role',
+              element: (
+                <Select
+                  placeholder="角色筛选"
+                  value={search.role || undefined}
+                  onChange={(val) => updateSearch({ role: val ?? '', offset: 0 })}
+                  allowClear
+                  style={{ width: '100%' }}
+                  options={[
+                    { label: '管理员', value: 'admin' },
+                    { label: '编辑', value: 'editor' },
+                    { label: '观察者', value: 'viewer' },
+                  ]}
+                />
+              ),
+            },
+          ]}
+        />
+
+        <DataTableFiltersState
+          activeCount={activeFilterCount}
+          emptyText="当前显示全部用户"
+          tags={
+            <>
+              {search.keyword ? <Tag color="processing">关键词：{search.keyword}</Tag> : null}
+              {search.role ? <Tag color="default">角色：{search.role}</Tag> : null}
+            </>
+          }
+          onClear={clearFilters}
+        />
+
+        <DataTableSummary
+          total={totalUsers}
+          totalLabel="位用户"
+          statusText={listQuery.isFetching ? '正在刷新列表数据…' : '数据已按当前筛选条件同步显示。'}
+          extraTags={
+            search.sortField && search.sortOrder ? (
+              <Tag color="blue">
+                排序：{search.sortField} / {search.sortOrder === 'ascend' ? '升序' : '降序'}
+              </Tag>
+            ) : null
+          }
+          statusTag={activeFilterCount > 0 ? <Tag color="processing">筛选已生效</Tag> : <Tag>全部结果</Tag>}
+        />
+      </Flex>
 
       <DataTable<User>
         loading={listQuery.isLoading}
         dataSource={listQuery.data?.items}
         columns={columns}
         rowKey="id"
+        maxHeight={560}
+        locale={{
+          emptyText: (
+            <div style={{ padding: '40px 0', textAlign: 'center' }}>
+              <Typography.Title level={5} style={{ margin: '0 0 8px' }}>
+                暂无匹配的用户
+              </Typography.Title>
+              <Typography.Text type="secondary">
+                {activeFilterCount > 0
+                  ? '请调整筛选条件后重试，或清空筛选查看全部用户。'
+                  : '当前还没有创建任何用户，请先新增用户。'}
+              </Typography.Text>
+            </div>
+          ),
+        }}
         pagination={{
           current: Math.floor(search.offset / search.limit) + 1,
           pageSize: search.limit,
-          total: listQuery.data?.total,
+          total: totalUsers,
           showSizeChanger: true,
           showTotal: (total) => `共 ${total} 条`,
           onChange: (page, pageSize) =>
@@ -212,13 +270,13 @@ function UsersPage() {
         onSubmit={handleSubmit}
         initialValues={modalInitial}
       >
-        <Form.Item name="name" label="名称" rules={[{ required: true }]}>
+        <Form.Item name="name" label="名称" rules={[{ required: true }]}> 
           <Input />
         </Form.Item>
-        <Form.Item name="email" label="邮箱" rules={[{ required: true, type: 'email' }]}>
+        <Form.Item name="email" label="邮箱" rules={[{ required: true, type: 'email' }]}> 
           <Input />
         </Form.Item>
-        <Form.Item name="role" label="角色" rules={[{ required: true }]}>
+        <Form.Item name="role" label="角色" rules={[{ required: true }]}> 
           <Select
             options={[
               { label: '管理员', value: 'admin' },
@@ -228,7 +286,7 @@ function UsersPage() {
           />
         </Form.Item>
         {!editingUser && (
-          <Form.Item name="password" label="密码" rules={[{ required: true }]}>
+          <Form.Item name="password" label="密码" rules={[{ required: true }]}> 
             <Input.Password />
           </Form.Item>
         )}

@@ -1,8 +1,8 @@
-import { Breadcrumb, Button, Flex, Tooltip, theme } from 'antd';
+import { Breadcrumb, Button, Flex, Tooltip, Typography, theme } from 'antd';
 import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useLocation, useMatches } from '@tanstack/react-router';
-import { useSettingsStore } from '@/stores/settings';
-import { Sun, Moon, Maximize, Minimize, Bell, Menu } from '@/core/icons';
+import { useTheme } from '@/core/theme';
+import { Sun, Moon, Maximize, Minimize, Menu } from '@/core/icons';
 import type { BreadcrumbProps } from 'antd';
 
 function formatPathTitle(pathname: string): string {
@@ -24,8 +24,7 @@ export interface HeaderProps {
 
 export function Header({ isMobile, onOpenMobileMenu }: HeaderProps) {
   const { token } = theme.useToken();
-  const toggleDarkMode = useSettingsStore((s) => s.toggleDarkMode);
-  const darkMode = useSettingsStore((s) => s.darkMode);
+  const { isDark, toggle } = useTheme();
   const matches = useMatches();
   const location = useLocation();
 
@@ -66,14 +65,16 @@ export function Header({ isMobile, onOpenMobileMenu }: HeaderProps) {
     });
   }, [location.pathname, matches]);
 
+  const currentTitle = breadcrumbItems[breadcrumbItems.length - 1]?.title ?? '首页';
+
   return (
     <Flex
       align="center"
       justify="space-between"
       gap={16}
       style={{
-        height: 64,
-        padding: `0 ${token.paddingLG}px`,
+        minHeight: 72,
+        padding: `12px ${token.paddingLG}px`,
         borderBottom: `1px solid ${token.colorBorderSecondary}`,
         background: token.colorBgContainer,
         flexShrink: 0,
@@ -88,27 +89,29 @@ export function Header({ isMobile, onOpenMobileMenu }: HeaderProps) {
             onClick={onOpenMobileMenu}
           />
         ) : null}
-        <Breadcrumb items={breadcrumbItems} style={{ minWidth: 0 }} />
+        <Flex vertical gap={2} style={{ minWidth: 0 }}>
+          <Breadcrumb items={breadcrumbItems} style={{ minWidth: 0 }} />
+          <Typography.Text strong style={{ fontSize: 16 }}>
+            {currentTitle}
+          </Typography.Text>
+        </Flex>
       </Flex>
       <Flex align="center" gap={4}>
-        <Tooltip title={darkMode ? '浅色模式' : '深色模式'}>
+        <Tooltip title={isDark ? '切换到浅色模式' : '切换到深色模式'}>
           <Button
             type="text"
-            icon={darkMode ? <Sun size={18} /> : <Moon size={18} />}
+            icon={isDark ? <Sun size={18} /> : <Moon size={18} />}
             aria-label="切换主题"
-            onClick={() => toggleDarkMode()}
+            onClick={toggle}
           />
         </Tooltip>
-        <Tooltip title={fullscreen ? '退出全屏' : '全屏'}>
+        <Tooltip title={fullscreen ? '退出全屏' : '进入全屏'}>
           <Button
             type="text"
             icon={fullscreen ? <Minimize size={18} /> : <Maximize size={18} />}
-            aria-label={fullscreen ? '退出全屏' : '全屏'}
+            aria-label={fullscreen ? '退出全屏' : '进入全屏'}
             onClick={toggleFullscreen}
           />
-        </Tooltip>
-        <Tooltip title="通知">
-          <Button type="text" icon={<Bell size={18} />} aria-label="通知" disabled />
         </Tooltip>
       </Flex>
     </Flex>
